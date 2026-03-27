@@ -337,9 +337,19 @@ unlabelledStatement
 simpleStatement
     : assignmentStatement
     | procedureStatement
+    | breakStatement
+    | continueStatement
     | gotoStatement
     | emptyStatement_
     ;
+
+breakStatement
+    : BREAK
+    ;
+
+continueStatement
+    : CONTINUE
+    ;   
 
 assignmentStatement
     : variable ASSIGN expression
@@ -529,6 +539,14 @@ withStatement
 
 recordVariableList
     : variable (COMMA variable)*
+    ;
+
+BREAK
+    : 'BREAK'
+    ;
+
+CONTINUE
+    : 'CONTINUE'
     ;
 
 CLASS       

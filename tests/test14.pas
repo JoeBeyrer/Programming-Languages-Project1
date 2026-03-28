@@ -1,14 +1,16 @@
-program Test14;
+program Test15;
+var
+  g: Integer;
 
-procedure MakeLocal;
+function AddToGlobal: Integer;
 var
   localValue: Integer;
 begin
-  localValue := 7;
-  writeln(localValue);
+  localValue := 5;
+  AddToGlobal := g + localValue;
 end;
 
 begin
-  MakeLocal;
-  writeln(localValue);
+  g := 10;
+  writeln(AddToGlobal());
 end.

@@ -1,16 +1,13 @@
-program Test15;
+program Test19;
 var
-  g: Integer;
-
-function AddToGlobal: Integer;
-var
-  localValue: Integer;
+  i: Integer;
 begin
-  localValue := 5;
-  AddToGlobal := g + localValue;
-end;
-
-begin
-  g := 10;
-  writeln(AddToGlobal());
+  for i := 1 to 5 do
+  begin
+    if i = 2 then
+      continue;
+    if i = 5 then
+      break;
+    writeln(i);
+  end;
 end.

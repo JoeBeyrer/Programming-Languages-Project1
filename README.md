@@ -1,5 +1,27 @@
 # Programming Languages Project 2
 
+## What was implemented
+
+### Core features
+
+- classes and objects
+- constructors and destructors
+- object method calls
+- terminal I/O with `readln` and `writeln`
+- while ... do
+- for ... do
+- break
+- continue
+- user-defined procedures
+- user-defined functions
+- static scoping for routines
+- loop-body scopes for `while` and `for`
+
+### Bonus features
+
+- simple constant propagation over the AST
+- formal parameter passing for procedures and functions
+
 ## Folder layout
 
 ```text
@@ -63,17 +85,28 @@ java -cp "src;lib/antlr-4.13.2-complete.jar" Main tests/bonustest4.pas --show-pr
 
 ## Tests
 
-### Project 1 tests
+### Project 1 tests (carried over)
 
-- `test1.pas`
-- `test2.pas`
-- `test3.pas`
-- `test4.pas`
-- `test5.pas`
-- `test6.pas`
-- `test7.pas`
-- `bonustest1.pas`
-- `bonustest2.pas`
+- `test1.pas`: constructor with parameter + readln input + private field access
+  - Requires integer input in command line to run
+  - Outputs the class field created from the user input
+- `test2.pas`: no-arg constructor + destructor
+  - Outputs 1 after succesfull construction and 0 after destruction
+- `test3.pas`: multiple instances of the same class
+  - Outputs point coordinates for two instances of the point object (3, 7) and (10, 20)
+- `test4.pas`: arithmetic inside constructor body
+  - Outputs 20 from 12 + 8 (hard-coded parameters) calculation inside constructor body
+- `test5.pas`: multiple different classes in one program
+  - Outputs 3 and 9 from fields of  Dog and Cat class instances
+- `test6.pas`: readln input + arithmetic in constructor + multiple fields
+  - Requires two integer inputs in command line to run
+  - Outputs width (first input), height (second input), and area (product of two inputs)
+- `test7.pas`: constructor with parameter + destructor explicitly called
+  - Outputs 99 (parameter hardcoded in constructor) and 0 upon instance destruction
+- `bonustest1.pas`: inheritance + subclass accessing parent field + two-parameter constructor
+  - Outputs 4 and 3 (parameters of inherited class)
+- `bonustest2.pas`: interface declaration + class implementing interface + procedure method call on instance
+  - Outputs 50 (the hardcoded parameter passed to the constructor) using the Print procedure
 
 ### Project 2 tests
 
@@ -102,28 +135,4 @@ These are expected to stop with a runtime error. They are to show that scope doe
 - `errotest3.pas`
 - `errotest4.pas`
 - `bonuserrotest1.pas`
-
-
-
-## What was implemented
-
-### Core Ffeatures
-
-- classes and objects
-- constructors and destructors
-- object method calls
-- terminal I/O with `readln` and `writeln`
-- while ... do
-- for ... do
-- break
-- continue
-- user-defined procedures
-- user-defined functions
-- static scoping for routines
-- loop-body scopes for `while` and `for`
-
-### Bonus features
-
-- simple constant propagation over the AST
-- formal parameter passing for procedures and functions
 

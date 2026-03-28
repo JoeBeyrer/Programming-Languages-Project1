@@ -58,7 +58,7 @@ java -cp "src;lib/antlr-4.13.2-complete.jar" Main tests/test1.pas
 This is useful for the constant-propagation bonus.
 
 ```bash
-java -cp "src;lib/antlr-4.13.2-complete.jar" Main tests/bonustest4.pas --folds
+java -cp "src;lib/antlr-4.13.2-complete.jar" Main tests/bonustest4.pas --show-prop
 ```
 
 ## Tests

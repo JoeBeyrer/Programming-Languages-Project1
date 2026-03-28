@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class FoldPrinter {
+public class ConstantPropagationPrinter {
 
     public void print(List<String> changes) {
         if (changes == null || changes.isEmpty()) {

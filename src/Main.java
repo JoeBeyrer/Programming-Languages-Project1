@@ -6,11 +6,11 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         String inputFile = args.length > 0 ? args[0] : "tests/test1.pas";
-        boolean showFolds = false;
+        boolean showProp = false;
 
         for (String arg : args) {
-            if (arg.equals("--folds")) {
-                showFolds = true;
+            if (arg.equals("--show-prop")) {
+                showProp = true;
             }
         }
 
@@ -29,12 +29,12 @@ public class Main {
         AstBuilder builder = new AstBuilder();
         ProgramNode program = (ProgramNode) builder.visit(tree);
 
-        ConstantFolder folder = new ConstantFolder();
-        program = folder.foldProgram(program);
+        ConstantPropagation propagation = new ConstantPropagation();
+        program = propagation.propagateProgram(program);
 
-        if (showFolds) {
-            FoldPrinter reporter = new FoldPrinter();
-            reporter.print(folder.getChanges());
+        if (showProp) {
+            ConstantPropagationPrinter reporter = new ConstantPropagationPrinter();
+            reporter.print(propagation.getChanges());
         }
 
         Interpreter interpreter = new Interpreter();

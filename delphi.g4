@@ -422,9 +422,8 @@ unsignedConstant
     ;
 
 functionDesignator
-    : identifier DOT identifier LPAREN parameterList RPAREN
-    | identifier DOT identifier LPAREN RPAREN
-    | identifier LPAREN parameterList RPAREN
+    : identifier DOT identifier LPAREN parameterList? RPAREN
+    | identifier LPAREN parameterList? RPAREN
     ;
 
 parameterList
@@ -446,8 +445,8 @@ element
     ;
 
 procedureStatement
-    : identifier DOT identifier (LPAREN parameterList RPAREN)?
-    | identifier (LPAREN parameterList RPAREN)?
+    : identifier DOT identifier (LPAREN parameterList? RPAREN)?
+    | identifier (LPAREN parameterList? RPAREN)?
     ;
 
 actualParameter

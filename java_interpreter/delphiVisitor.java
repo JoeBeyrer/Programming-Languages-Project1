@@ -436,6 +436,18 @@ public interface delphiVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSimpleStatement(delphiParser.SimpleStatementContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link delphiParser#breakStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBreakStatement(delphiParser.BreakStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link delphiParser#continueStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitContinueStatement(delphiParser.ContinueStatementContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link delphiParser#assignmentStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

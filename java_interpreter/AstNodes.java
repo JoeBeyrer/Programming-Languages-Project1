@@ -3,11 +3,8 @@ import java.util.List;
 abstract class AstNode { }
 
 abstract class DeclNode extends AstNode { }
-
 abstract class StmtNode extends AstNode { }
-
 abstract class ExprNode extends AstNode { }
-
 
 class ProgramNode extends AstNode {
     String name;
@@ -29,21 +26,32 @@ class BlockNode extends AstNode {
     }
 }
 
+class ParamDecl {
+    String name;
+    String typeName;
+
+    ParamDecl(String name, String typeName) {
+        this.name = name;
+        this.typeName = typeName;
+    }
+}
 
 class VarDecl extends DeclNode {
     String name;
+    String typeName;
 
-    VarDecl(String name) {
+    VarDecl(String name, String typeName) {
         this.name = name;
+        this.typeName = typeName;
     }
 }
 
 class ProcedureDecl extends DeclNode {
     String name;
-    List<String> params;
+    List<ParamDecl> params;
     BlockNode body;
 
-    ProcedureDecl(String name, List<String> params, BlockNode body) {
+    ProcedureDecl(String name, List<ParamDecl> params, BlockNode body) {
         this.name = name;
         this.params = params;
         this.body = body;
@@ -52,16 +60,17 @@ class ProcedureDecl extends DeclNode {
 
 class FunctionDecl extends DeclNode {
     String name;
-    List<String> params;
+    List<ParamDecl> params;
+    String returnType;
     BlockNode body;
 
-    FunctionDecl(String name, List<String> params, BlockNode body) {
+    FunctionDecl(String name, List<ParamDecl> params, String returnType, BlockNode body) {
         this.name = name;
         this.params = params;
+        this.returnType = returnType;
         this.body = body;
     }
 }
-
 
 class CompoundStmt extends StmtNode {
     List<StmtNode> body;
@@ -71,6 +80,8 @@ class CompoundStmt extends StmtNode {
     }
 }
 
+class NoOpStmt extends StmtNode { }
+
 class AssignStmt extends StmtNode {
     String target;
     ExprNode value;
@@ -78,6 +89,18 @@ class AssignStmt extends StmtNode {
     AssignStmt(String target, ExprNode value) {
         this.target = target;
         this.value = value;
+    }
+}
+
+class IfStmt extends StmtNode {
+    ExprNode condition;
+    StmtNode thenBranch;
+    StmtNode elseBranch;
+
+    IfStmt(ExprNode condition, StmtNode thenBranch, StmtNode elseBranch) {
+        this.condition = condition;
+        this.thenBranch = thenBranch;
+        this.elseBranch = elseBranch;
     }
 }
 
@@ -107,17 +130,12 @@ class ForStmt extends StmtNode {
     }
 }
 
-class BreakStmt extends StmtNode {
-    BreakStmt() { }
-}
-
-class ContinueStmt extends StmtNode {
-    ContinueStmt() { }
-}
+class BreakStmt extends StmtNode { }
+class ContinueStmt extends StmtNode { }
 
 class ProcedureCallStmt extends StmtNode {
     String identifier;
-    String dotIdentifier;   // null if this is just a normal procedure call
+    String dotIdentifier;
     List<ExprNode> params;
 
     ProcedureCallStmt(String identifier, String dotIdentifier, List<ExprNode> params) {
@@ -126,7 +144,6 @@ class ProcedureCallStmt extends StmtNode {
         this.params = params;
     }
 }
-
 
 class IntLiteral extends ExprNode {
     int value;
@@ -144,6 +161,14 @@ class BoolLiteral extends ExprNode {
     }
 }
 
+class StringLiteral extends ExprNode {
+    String value;
+
+    StringLiteral(String value) {
+        this.value = value;
+    }
+}
+
 class VarExpr extends ExprNode {
     String name;
 
@@ -151,6 +176,8 @@ class VarExpr extends ExprNode {
         this.name = name;
     }
 }
+
+class NilLiteral extends ExprNode { }
 
 class BinaryExpr extends ExprNode {
     ExprNode left;
@@ -176,7 +203,7 @@ class UnaryExpr extends ExprNode {
 
 class FunctionCallExpr extends ExprNode {
     String identifier;
-    String dotIdentifier;  
+    String dotIdentifier;
     List<ExprNode> args;
 
     FunctionCallExpr(String identifier, String dotIdentifier, List<ExprNode> args) {

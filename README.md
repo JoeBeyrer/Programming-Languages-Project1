@@ -2,25 +2,19 @@
 
 ## What was implemented
 
-### Core features
+### Features
 
-- classes and objects
-- constructors and destructors
-- object method calls
-- terminal I/O with `readln` and `writeln`
+- classes and objects (from Project 1)
+- constructors and destructors (from Project 1)
+- encapsulation (from Project 1)
+- terminal I/O with `readln` and `writeln` (from Project 1)
+- inheritance and interfaces (from Project 1)
 - while ... do
 - for ... do
-- break
-- continue
-- user-defined procedures
-- user-defined functions
-- static scoping for routines
-- loop-body scopes for `while` and `for`
-
-### Bonus features
-
-- simple constant propagation over the AST
-- formal parameter passing for procedures and functions
+- break and continue
+- user-defined functions and procedures
+- constant propagation (BONUS)
+- formal parameter passing in procedures/functions (BONUS)
 
 ## Folder layout
 
@@ -32,8 +26,8 @@ src/
   Main.java
   AstNodes.java
   AstBuilder.java
-  ConstantFolder.java
-  AstPrinter.java
+  ConstantPropagation.java
+  ConstantPropagationPrinter.java
   Interpreter.java
   Scope.java
   Signals.java
@@ -42,13 +36,14 @@ lib/
 tests/
   test1.pas ...
   bonustest1.pas ...
+  errortest1.pas ...
 ```
 
 ## Git Bash commands
 
 ### 1. Clean old files
 
-If any errors are encountered during execution, execute the following commands to clean and regenerate old files.
+If any errors are encountered during execution, execute the following commands to clean and regenerate old files. Otherwise, skip to step 4.
 
 ```bash
 rm -f src/*.class
@@ -62,6 +57,7 @@ rm -f src/delphiLexer.java src/delphiParser.java src/delphiListener.java src/del
 ```bash
 java -jar lib/antlr-4.13.2-complete.jar -visitor -listener -o src grammar/delphi.g4
 ```
+Note: If the ANTLR files do not generate directly in src they may need to be manually moved to src.
 
 ### 3. Compile
 

@@ -1,16 +1,22 @@
 
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
         String inputFile = args.length > 0 ? args[0] : "tests/test1.pas";
         boolean showProp = false;
+        String outputFile = "output.ll";
 
-        for (String arg : args) {
-            if (arg.equals("--show-prop")) {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("--show-prop")) {
                 showProp = true;
+            }
+            if (args[i].equals("-o") && i + 1 < args.length) {
+                outputFile = args[i + 1];
             }
         }
 
@@ -37,7 +43,9 @@ public class Main {
             reporter.print(propagation.getChanges());
         }
 
-        Interpreter interpreter = new Interpreter();
-        interpreter.executeProgram(program);
+        LlvmCodeGenerator generator = new LlvmCodeGenerator();
+        String ir = generator.generate(program);
+        Files.writeString(Path.of(outputFile), ir);
+        System.out.println("Wrote LLVM IR to " + outputFile);
     }
 }

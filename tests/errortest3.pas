@@ -1,4 +1,4 @@
-program Test17;
+program ErrorTest3;
 var
   i: Integer;
 begin

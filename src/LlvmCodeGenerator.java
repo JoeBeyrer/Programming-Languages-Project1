@@ -107,6 +107,7 @@ public class LlvmCodeGenerator {
     private final StringBuilder functions = new StringBuilder();
 
     private StringBuilder currentOut;
+    private boolean currentBlockTerminated;
     private int tempCounter;
     private int labelCounter;
     private int stringCounter;
@@ -151,6 +152,7 @@ public class LlvmCodeGenerator {
         globals.setLength(0);
         functions.setLength(0);
         currentOut = null;
+        currentBlockTerminated = false;
         tempCounter = 0;
         labelCounter = 0;
         stringCounter = 0;
@@ -388,13 +390,16 @@ public class LlvmCodeGenerator {
         currentRoutine = null;
         currentClass = null;
         tempCounter = 0;
+        currentBlockTerminated = false;
 
         emitLine("define i32 @main() {");
         emitLine("entry:");
 
         pushLocalScope();
         emitStmt(program.block.body);
-        emitLine("  ret i32 0");
+        if (!currentBlockTerminated) {
+            emitLine("  ret i32 0");
+        }
         popLocalScope();
 
         emitLine("}");
@@ -406,6 +411,7 @@ public class LlvmCodeGenerator {
         currentRoutine = info.decl;
         currentClass = info.decl.ownerName == null ? null : requireClass(info.decl.ownerName);
         tempCounter = 0;
+        currentBlockTerminated = false;
 
         StringBuilder header = new StringBuilder();
         header.append("define ").append(info.returnType).append(' ').append(info.llvmName).append('(');
@@ -452,14 +458,16 @@ public class LlvmCodeGenerator {
         declareLocals(info.decl.body, false);
         emitStmt(info.decl.body.body);
 
-        if (info.decl.isFunction) {
-            LlvmVar retVar = requireVar(info.decl.name);
-            LlvmValue retValue = loadVar(retVar);
-            emitLine("  ret " + retValue.llvmType + " " + retValue.ref);
-        } else if (info.decl.isConstructor) {
-            emitLine("  ret ptr %this");
-        } else {
-            emitLine("  ret void");
+        if (!currentBlockTerminated) {
+            if (info.decl.isFunction) {
+                LlvmVar retVar = requireVar(info.decl.name);
+                LlvmValue retValue = loadVar(retVar);
+                emitLine("  ret " + retValue.llvmType + " " + retValue.ref);
+            } else if (info.decl.isConstructor) {
+                emitLine("  ret ptr %this");
+            } else {
+                emitLine("  ret void");
+            }
         }
 
         popLocalScope();
@@ -499,6 +507,9 @@ public class LlvmCodeGenerator {
         }
         if (stmt instanceof CompoundStmt) {
             for (StmtNode inner : ((CompoundStmt) stmt).body) {
+                if (currentBlockTerminated) {
+                    break;
+                }
                 emitStmt(inner);
             }
             return;
@@ -555,12 +566,16 @@ public class LlvmCodeGenerator {
 
         emitLabel(thenLabel);
         emitStmt(stmt.thenBranch);
-        emitLine("  br label %" + endLabel);
+        if (!currentBlockTerminated) {
+            emitLine("  br label %" + endLabel);
+        }
 
         if (elseLabel != null) {
             emitLabel(elseLabel);
             emitStmt(stmt.elseBranch);
-            emitLine("  br label %" + endLabel);
+            if (!currentBlockTerminated) {
+                emitLine("  br label %" + endLabel);
+            }
         }
 
         emitLabel(endLabel);
@@ -579,7 +594,9 @@ public class LlvmCodeGenerator {
         loopStack.push(new LoopTarget(condLabel, endLabel));
         emitLabel(bodyLabel);
         emitStmt(stmt.body);
-        emitLine("  br label %" + condLabel);
+        if (!currentBlockTerminated) {
+            emitLine("  br label %" + condLabel);
+        }
         loopStack.pop();
 
         emitLabel(endLabel);
@@ -623,7 +640,9 @@ public class LlvmCodeGenerator {
         loopStack.push(new LoopTarget(stepLabel, endLabel));
         emitLabel(bodyLabel);
         emitStmt(stmt.body);
-        emitLine("  br label %" + stepLabel);
+        if (!currentBlockTerminated) {
+            emitLine("  br label %" + stepLabel);
+        }
         loopStack.pop();
 
         emitLabel(stepLabel);
@@ -1191,9 +1210,13 @@ public class LlvmCodeGenerator {
             return "false";
         }
         if (type.equals("string")) {
-            return stringPtr("").ref;
+            return stringLiteralRef("");
         }
         return "null";
+    }
+
+    private String stringLiteralRef(String value) {
+        return internString(value).symbol;
     }
 
     private LlvmValue stringPtr(String value) {
@@ -1283,10 +1306,15 @@ public class LlvmCodeGenerator {
 
     private void emitLine(String line) {
         currentOut.append(line).append('\n');
+        String trimmed = line.trim();
+        if (trimmed.startsWith("br ") || trimmed.startsWith("ret ")) {
+            currentBlockTerminated = true;
+        }
     }
 
     private void emitLabel(String label) {
         currentOut.append(label).append(":\n");
+        currentBlockTerminated = false;
     }
 
     private void pushLocalScope() {

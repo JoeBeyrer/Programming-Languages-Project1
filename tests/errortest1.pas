@@ -1,4 +1,4 @@
-program Test14;
+program ErrorTest1;
 
 procedure MakeLocal;
 var

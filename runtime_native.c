@@ -16,7 +16,11 @@ void print_str(char *value) {
 
 int read_i32(void) {
     int value = 0;
+#ifdef _MSC_VER // Windows (otherwise gives warning)
     if (scanf_s("%d", &value) != 1) {
+#else // Linux and Mac
+    if (scanf("%d", &value) != 1) {
+#endif
         return 0;
     }
     return value;

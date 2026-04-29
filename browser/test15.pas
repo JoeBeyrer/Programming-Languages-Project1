@@ -7,7 +7,7 @@ begin
     if i = 2 then
       continue;
     if i = 5 then
-      break;
+      break
     else
       writeln(i);
   end;

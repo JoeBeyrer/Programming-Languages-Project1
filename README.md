@@ -48,10 +48,10 @@ javac -cp "lib/antlr-4.13.2-complete.jar" src/*.java
 
 ```bash
 # Windows / Git Bash
-java -cp "src;lib/antlr-4.13.2-complete.jar" Main tests/test8.pas -o output/output_test1.ll
+java -cp "src;lib/antlr-4.13.2-complete.jar" Main tests/test1.pas -o output/output_test1.ll
 
 # macOS / Linux
-java -cp "src:lib/antlr-4.13.2-complete.jar" Main tests/test8.pas -o output/output_test1.ll
+java -cp "src:lib/antlr-4.13.2-complete.jar" Main tests/test1.pas -o output/output_test1.ll
 ```
 
 ### 5. Run LLVM IR natively

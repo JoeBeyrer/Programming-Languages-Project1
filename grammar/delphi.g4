@@ -491,7 +491,7 @@ conditionalStatement
     ;
 
 ifStatement
-    : IF expression THEN statement (: ELSE statement)?
+    : IF expression THEN statement (ELSE statement)?
     ;
 
 caseStatement

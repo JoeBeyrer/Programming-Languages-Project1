@@ -34,7 +34,9 @@ if [ -z "$PAS_FILE" ]; then
 fi
 
 if [ -n "$PAS_FILE" ] && [ -f "$PAS_FILE" ]; then
-  PAS_COPY="${WASM_FILE%.wasm}.pas"
+  WASM_BASE="$(basename "$WASM_FILE" .wasm)"
+  PAS_DISPLAY_NAME="${WASM_BASE#output_}.pas"
+  PAS_COPY="$(dirname "$WASM_FILE")/$PAS_DISPLAY_NAME"
   cp "$PAS_FILE" "$PAS_COPY"
   echo "Copied Pascal source to $PAS_COPY"
 else

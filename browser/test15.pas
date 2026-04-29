@@ -8,6 +8,7 @@ begin
       continue;
     if i = 5 then
       break;
-    writeln(i);
+    else
+      writeln(i);
   end;
 end.

@@ -22,8 +22,6 @@ fi
 LL_COPY="${WASM_FILE%.wasm}.ll"
 cp "$LL_FILE" "$LL_COPY"
 
-# Copy the Pascal source next to the WASM so the browser demo can show
-# source-on-left and generated LLVM-on-right. A third argument overrides inference.
 if [ -z "$PAS_FILE" ]; then
   LL_BASE="$(basename "$LL_FILE" .ll)"
   TEST_NAME="${LL_BASE#output_}"
